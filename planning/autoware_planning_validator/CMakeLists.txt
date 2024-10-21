@@ -2,12 +2,18 @@ cmake_minimum_required(VERSION 3.22)
 project(autoware_planning_validator)
 
 find_package(autoware_cmake REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
+
 autoware_package()
 
 ament_auto_add_library(autoware_planning_validator_helpers SHARED
   src/utils.cpp
   src/debug_marker.cpp
+  src/trajectory_transform.cpp
 )
+
+ament_auto_find_build_dependencies()
 
 # planning validator
 ament_auto_add_library(autoware_planning_validator_component SHARED
@@ -18,6 +24,16 @@ target_link_libraries(autoware_planning_validator_component autoware_planning_va
 rclcpp_components_register_node(autoware_planning_validator_component
   PLUGIN "autoware::planning_validator::PlanningValidator"
   EXECUTABLE planning_validator_node
+)
+# Trajectory Transformer
+ament_auto_add_library(trajectory_transformer_node SHARED
+  include/autoware/planning_validator/trajectory_transform.hpp
+  src/trajectory_transform.cpp
+)
+target_link_libraries(trajectory_transformer_node autoware_planning_validator_helpers)
+rclcpp_components_register_node(trajectory_transformer_node
+  PLUGIN "autoware::planning_validator::TrajectoryTransformer"
+  EXECUTABLE trajectory_transformer
 )
 
 # invalid trajectory publisher (for debug)
