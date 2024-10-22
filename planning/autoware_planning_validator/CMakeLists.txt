@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION 3.22)
 project(autoware_planning_validator)
 
 find_package(autoware_cmake REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
 autoware_package()
 
 ament_auto_add_library(autoware_planning_validator_helpers SHARED
   src/utils.cpp
   src/debug_marker.cpp
+  # src/trajectory_msg_transformer.cpp
 )
 
 # planning validator
@@ -35,6 +38,17 @@ rosidl_generate_interfaces(
   DEPENDENCIES builtin_interfaces
 )
 
+# Trajectory Transformer
+ament_auto_add_library(trajectory_msg_transformer_component SHARED
+  src/trajectory_msg_transformer.cpp
+)
+target_link_libraries(trajectory_msg_transformer_component autoware_planning_validator_helpers)
+rclcpp_components_register_node(trajectory_msg_transformer_component
+  PLUGIN "autoware::planning_validator::TrajectoryTransformer"
+  EXECUTABLE trajectory_msg_transformer_node
+)
+
+
 # to use a message defined in the same package
 if(${rosidl_cmake_VERSION} VERSION_LESS 2.5.0)
     rosidl_target_interfaces(autoware_planning_validator_component
@@ -57,6 +71,7 @@ if(BUILD_TESTING)
   ament_target_dependencies(test_autoware_planning_validator
     rclcpp
     autoware_planning_msgs
+    
   )
   target_link_libraries(test_autoware_planning_validator
   autoware_planning_validator_component
