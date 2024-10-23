@@ -1,0 +1,15 @@
+<launch>
+  <arg name="input_trajectory" default="/planning/scenario_planning/velocity_smoother/trajectory"/>
+  <arg name="output_trajectory" default="/planning/scenario_planning/trajectory"/>
+  <arg name="output_trajectory_baselink" default="/planning/scenario_planning/trajectory_baselink"/>
+
+
+  <node name="trajectory_msg_transformer" exec="trajectory_msg_transformer_node" pkg="autoware_planning_validator" output="screen" ros_args="--log-level debug">
+
+    <!-- remap topic name -->
+    <remap from="~/output/trajectory" to="$(var output_trajectory)"/>
+    <remap from="~/output/trajectory_baselink" to="$(var output_trajectory_baselink)"/>
+
+
+  </node>
+</launch>

@@ -12,6 +12,8 @@ ament_auto_add_library(autoware_planning_validator_helpers SHARED
   # src/trajectory_msg_transformer.cpp
 )
 
+ament_auto_find_build_dependencies()
+
 # planning validator
 ament_auto_add_library(autoware_planning_validator_component SHARED
   include/autoware/planning_validator/planning_validator.hpp
@@ -40,9 +42,13 @@ rosidl_generate_interfaces(
 
 # Trajectory Transformer
 ament_auto_add_library(trajectory_msg_transformer_component SHARED
+  include/autoware/planning_validator/trajectory_msg_transformer.hpp
   src/trajectory_msg_transformer.cpp
 )
-target_link_libraries(trajectory_msg_transformer_component autoware_planning_validator_helpers)
+target_link_libraries(trajectory_msg_transformer_component 
+  autoware_planning_validator_helpers
+)
+
 rclcpp_components_register_node(trajectory_msg_transformer_component
   PLUGIN "autoware::planning_validator::TrajectoryTransformer"
   EXECUTABLE trajectory_msg_transformer_node
