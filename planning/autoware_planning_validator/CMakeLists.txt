@@ -50,7 +50,7 @@ target_link_libraries(trajectory_msg_transformer_component
 )
 
 rclcpp_components_register_node(trajectory_msg_transformer_component
-  PLUGIN "autoware::planning_validator::TrajectoryTransformer"
+  PLUGIN "autoware::planning_validator::TrajectoryTransformerNode"
   EXECUTABLE trajectory_msg_transformer_node
 )
 

@@ -5,10 +5,12 @@
 
 
   <node name="trajectory_msg_transformer" exec="trajectory_msg_transformer_node" pkg="autoware_planning_validator" output="screen" ros_args="--log-level debug">
-
+    <!-- set target frame id's -->
+    <param name="target_frame_" value="baselink" />
+    <param name="source_frame_" value="map" />
     <!-- remap topic name -->
     <remap from="~/output/trajectory" to="$(var output_trajectory)"/>
-    <remap from="~/output/trajectory_baselink" to="$(var output_trajectory_baselink)"/>
+    <remap from="~/output/transformed_trajectory" to="$(var output_trajectory_baselink)"/>
 
 
   </node>
