@@ -9,7 +9,6 @@ autoware_package()
 ament_auto_add_library(autoware_planning_validator_helpers SHARED
   src/utils.cpp
   src/debug_marker.cpp
-  # src/trajectory_msg_transformer.cpp
 )
 
 ament_auto_find_build_dependencies()
@@ -43,6 +42,7 @@ rosidl_generate_interfaces(
 # Trajectory Transformer
 ament_auto_add_library(trajectory_msg_transformer_component SHARED
   include/autoware/planning_validator/trajectory_msg_transformer.hpp
+  include/autoware/planning_validator/trajectory_transform_template.hpp
   src/trajectory_msg_transformer.cpp
 )
 target_link_libraries(trajectory_msg_transformer_component 
@@ -53,7 +53,6 @@ rclcpp_components_register_node(trajectory_msg_transformer_component
   PLUGIN "autoware::planning_validator::TrajectoryTransformerNode"
   EXECUTABLE trajectory_msg_transformer_node
 )
-
 
 # to use a message defined in the same package
 if(${rosidl_cmake_VERSION} VERSION_LESS 2.5.0)
